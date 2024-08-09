@@ -319,7 +319,7 @@ Each option has two parts:
 
 The first part is self explanatory, given that we understand how the `src` attribute of the `<img>` element works.
 
-### X & W Descriptors
+## X & W Descriptors
 
 The descriptors are either x or w descriptors. Let's talk about x-descriptors first.
 
@@ -330,7 +330,7 @@ The descriptors are either x or w descriptors. Let's talk about x-descriptors fi
 ### Srcset w/ x-descriptor
 
 `<img src="default.jpg" alt="image description"
-    srcset="image1.jpg 2x, 
+      srcset="image1.jpg 2x, 
              image2.jpg 3x," />
             `
 
@@ -349,12 +349,94 @@ Note the usage of the `src`attribute, which again, is required. The`src`attribut
 
 For browsers that do not support`srcset`the value of `src` is the fallback.
 
-#### w-descriptors
+## w-descriptors
 
-The sample below shows how I understand the structure of the `srcset` attribute.
+W-descriptors allow for images to change based on size of the browser viewport.
 
-`srcset="image-url descriptor,
-image-url descriptor"`
+### What is a Viewport
+
+A viewport refers to the visible area of a web page on a user's screen. It is the portion of the page that is currently viewable and can vary in size depending on device or browser window.
+
+On a mobile devices the viewport is the whole screen.
+
+On a desktop browser the viewport is the area where a web page is displayed.
+
+Items like scroll bars, tool bars, address bar, tabs, menu buttons, status bars, and bookmark bars are considered the web browsers chrome.
+
+## Back to w-descriptors
+
+Again we use the `<img>` element, with the `srcset` (like we do with x-descriptors).As its name indicates, a w-descriptor provides the pixel width of each image, which comes after the image url. In addition to `srcset` we also use the `sizes` attribute.
+
+`srcset="doggo_480.jpg 480w,
+        doggo_960.jpg 960w,
+        doggo_1280.jpg 1280w,
+        doggo_2400.jpg 2400w"`
+
+`srcset` has 4 list items. The first image has a width of 480px the second 960px, the third 1280px and the last 2400px.
+
+### Sizes Attribute
+
+The `sizes` attribute tells the web browser how much of the viewport the image will take up. It is important for sizes browser the approximate size of the images because when a browser downloads the HTML doc for website the first thing it does scan the document in order to establish its outline structure (Document Object Model (DOM)). Right after the browser pre-loader grabs all the images from the server so they are ready to go. Finally the browser downloads the CSS and JavaScript. The CSS file probably has instructions about the layout of images, but the images are downloaded before these instructions. So we give the browser a good hint with the `sizes` attribute about how much space images will take up. This way the preloader can select the correct image from the `srcset` list.
+
+In the simplest scenario we would have an image like a banner that always appears at 100% regardless of device.
+
+<img src="doggos_640.jpg" 
+  alt="image of a dog"
+  srcset="doggo_480.jpg 480w,
+        doggo_960.jpg 960w,
+        doggo_1280.jpg 1280w,
+        doggo_2400.jpg 2400w"
+  sizes="100 vw"/>
+
+`sizes` tells the browser that the image it selects should take up 100% of the viewport. `vw` stands for viewport width and it is the most common unit used with the sizes attribute. There are other units that can be used like px, ems, viewport height (vw) and others. Percentages are invalid.
+
+- 100vw = 100%
+- 75vw = 75%
+- 50vw = 50%
+
+Sizing an image to fill the entire width of a browser is a specific case. More commonly images will be one aspect of a responsive page layout. Images within the context of page with many other elements will need resize and rearrange to best suit the available screen width.
+
+In the scenarios where an image is a component of a page that needs to respond to the available screen width we use the `sizes` attribute to tell the browser how the image should be resized based on a screen's width. In these cases the `sizes` attribute becomes a comma separated list (like `srcset`). Each list item has two parts.
+
+1. Media Condition: a condition that determines when a particular length should be used (which has two dependent values the media feature and the media feature's value). The media condition is wrapped in parenthesis ().
+2. Length: indicates the width an image will occupy in the layout if the media condition is met.
+
+### Media Condition Parts
+
+1. Media Feature: A characteristic the device or viewport that the browser testes in order to apply a particularly sized image to the layout. With the `sizes` attribute the media feature values can be:
+
+- max-width
+- min-width
+- max-height
+- min height
+- orientation: determines if the device is in portrait or landscape. In short orientation can have two values either portrait or landscape.
+- aspect-ratio: width:height ratio of screen for instance 16:9.
+
+2. Value: The value (some sort of of unit like px) of the media feature.
+
+The media feature and its value are dependent on each other.
+
+`(max-width: 480px) length` This says if viewport is 480px or smaller a particular sized image will need to be used.
+
+The media feature is followed by a colon `:`. After the colon is the second part of `sizes` list item, which is length.
+
+`(max-width: 480px) 100vw` This says if the viewport is 480px or smaller the image should take up 100% of the viewport.
+
+Here is a complete code snippet:
+
+<img src="doggos_640.jpg" 
+  alt="image of a dog"
+  srcset="doggo_480.jpg 480w,
+        doggo_960.jpg 960w,
+        doggo_1280.jpg 1280w,
+        doggo_2400.jpg 2400w"
+  sizes="(max-width: 480px) 100vw
+         (max-width: 960px) 75vw, 
+         240px"/>
+
+Let's break this down, we already covered the first item in the `sizes` list. The second item says, if the viewport is wider than 480px but not wider than 960px image takes up 75% if the viewport. If the viewport is larger than 960px and doesn't meet any of prior media conditions the image gets sized to 240px.
+
+---
 
 ## Helpful Info
 
