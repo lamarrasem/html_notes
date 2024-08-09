@@ -1,0 +1,363 @@
+# Adding Images in HTML
+
+---
+
+## Intro
+
+Before images the Internet was text only, which makes sense because Tim Berners-Lee created to share scientific articles with colleagues.
+
+Images can show up on web pages in 2 ways:
+
+1. Embedded in the inline content
+2. Background images
+
+When the image is part of the editorial content (product photos, gallery images, ads, illustrations etc) they should be embedded into the inline content. We use the `<img>` tag for that.
+
+When an image is purely decorative (think myspace page backgrounds, header background image patterned border around an element), we should use CSS to add them to our document.
+
+Inline elements appear in the flow of a document. In contrast to block elements that take up a full line and other elements will appear below it.
+
+---
+
+## Image Formats
+
+To get an image on the web it has to be in a web supported format, such as:
+
+- PNG
+- JPG
+- GIF
+- WebP
+- JPEG-XR
+
+The latter two WebP and JPEG-XR are newer and not supported in all browsers.
+
+You'll need to convert non web supported images to web supported images. For instance if you have TIFF file.
+
+If you have to keep your image in an original non-web supported format you can make it available as an external image.
+
+`<a href="originalartwork.tiff">View the original artwork</a>`
+
+## Adding Images to a Document
+
+To add an image to a document we use the `<img>` tag.
+
+Important things to know about the `<img> element.
+
+- `<img>` is self closing. You don't need to add a closing tag to it.
+
+- It is an empty tag, meaning it doesn't have any content.
+
+- It is an inline element so it appears in the flow of text. You will need to add markup or styles that put an image on its own line like a block element.
+
+- It is a replaced element because it is replaced by an external file when the page is displayed.
+
+- The bottom edge of an image aligns with the baseline of text. Can change this with CSS.
+
+- The attributes src and alt are required with the `<img>` tag.
+
+The value of the src attribute is the images location. This can be a relative or absolute path. I like to think of src as href for images.
+
+The value of the alt attribute is the text that describes the images. In case the images doesn't load or someone is using assistive technology the alt text will be shown or read. If an image doesn't add meaning to the text you can leave alt empty. When leaving it empty don't add a space between quotation marks. It should look like this:
+
+`alt=""`
+
+There are best practices for adding alt text. [WebAim has some tips for alt text best practices](https://webaim.org/techniques/alttext/)
+
+It is common practice to put images in a specific folder usually called images or img or images. This is helpful to to search engines. Sometimes each section of a site has its own image folder.
+
+### Tips
+
+Think about how the alt text sounds. Break your code so that the alt text is displayed. Read it out loud to see if it ads to the experience or might be obtrusive to someone using assistive technology.
+
+### Image Syntax
+
+<img src="pathtoimagerelativeorabsolute" alt="description of image">
+
+---
+
+## Adding Dimensions
+
+We use the width and height attributes to specify the dimensions of an image. Width and height aren't for resizing images. When we use responsive image techniques we should not use width and height attributes. The pixels used to specify width and height should be the size of the actual image to avoid distortion. It seems that when pages are not designed responsively we need to dictate to the browser how to size images.
+
+`width="200" height=200"`
+
+I omitted the pixel (px) suffix, it is not needed in the html.
+
+---
+
+## SVGs - Scalable Vector Graphics
+
+I am not sure why they are called SVGs? Because to my knowledge all vector files are scalable. That seems like the whole point of vectors? Being able to resize them without distortion. The .svg suffix is also known as a stand alone SVG
+
+cdInstead of a grid of pixels like with raster(bitmapped images) vectors are composed of shapes and paths that are mathematically defined.
+
+The shapes and paths in SVGs are specified by written instructions. These instructions are written in SVG markup language, xml. Browsers that support SVGs read the xml file and follow the instructions from the file to render the SVG. Chapter 25 of Learning Web Design is dedicated to SVGs and I want to spend more time learning about SVGs.
+
+There are 3 methods we can use add SVGs to an HTML document.
+
+**Method 1: Embed with the `<img> element` . Like this for example:**
+
+`<img src="pathto.svgfile" alt="description of svg file" />`
+
+### Advantages of Embed Method
+
+- Supported by all browsers that support SVGs
+
+### Disadvantages of Embed Method
+
+- Can't apply styles to to the items within the SVG with an external stylesheet. You can apply styles to the <img> tag itself. The .svg file might include its own internal style sheet by using the style element to style the elements within it.
+
+- Can't use JavaScript to manipulate the elements within the .svg file. :hover styles (CSS) won't work either.
+
+- Can't use any external files including embedded images or web fonts within the SVG.
+
+**Method 2: Inline w/ HTML**
+
+You can copy the content of a SVG file and paste it into the HTML document. You use the `<svg>` tag to do this:
+
+`<svg></svg>`
+
+### Advantages of Inline Method
+
+- When you paste the SVG markup into an HTML document you can take full advantage of the SVG features because you can access the markup. The elments of the SVG are a part of the DOM (document object model) tree so the SVG can be manipulated by JavaScript, which means you can make it interactive.
+
+### Disadvantages of Inline Method
+
+- SVG markup can get long and complicated, pasting it into your HTML will add to the length and complicatedness of the HTML file.
+
+- Also makes it harder to maintain images on the site, since they are squirreled away in the HTML document. You have to pilfer through a long document to find the SVG markup you want to address.
+
+- Inline SVGs are not cached by the browser. So avoid using SVGs for larger images that are reused across HTML pages.
+
+#### Remember [to check browser compatibility for SVG method](caniuse.com)
+
+**Method 3: Embed with the Object Element**
+
+The `<object>` element is used to embed various sorts of media and can be used with SVGs. It is a compromise between using the `img` element or the inline method.
+
+The opening object tag specifies the type of media in this case imga/svg+xml (kinda like the MIME type type/subtype syntax) and points to the file that will be sued with data attribute.
+
+The object element has its own fallback mechanism. If you have an SVG file you can add a png version of it to the object element. If the SVG isn't rendered by the browser the PNG version of the file will render instead.
+
+Syntax:
+
+`<object type="image/svg+xml" data="pizza.svg" 
+  <img src="pizza.png" alt="pizza">
+</object>
+`
+
+### Advantages
+
+- Adding SVGs to HTML with the object element means they can be scriptied and load external files.
+
+- They can access the parent HTML doc with some security restrictions.
+
+### Disadvantages
+
+- When embedding a SVG image with the object element they are separate files and not a part of the dom tree (like when embedding with the image element). As such you can't use a stylesheet win the HTML document to style the elements within the SVG. Embedded SVGs may also have some buggy behaviors in browsers. Be sure to test them thoroughly.
+
+- Some browsers download the fallback image even if they support SVG and don't need the fallback. The work around is to make the fallback image a CSS background image with an empty div container. However this makes the image less flexible for scaling and sizing.
+
+```
+<object type="image/svg+xml" data="pizza.svg"
+  <style="background-image: url(pizza.png); width 100px; height: 100px;"
+  role="img" aria-label="pizza"
+  >
+</object>
+```
+
+---
+
+## SVGs & CSS
+
+You can use SCGs as background images with CSS.
+
+---
+
+## Technical Side of Images
+
+Name your images with proper suffixes. In Linux this doesn't matter, but for your web page it does. Your server needs to configured to serve these various image types. All servers are configured to serve PNG, JPEG, and GIFs without an extra configuration needed. To serve SVGs for newer formats like WebP and JPEG-XR you may need to add the specific formate to the server to support.
+
+Image files and any other media file that live on a server have an official media type also called a MIME (Multipurpose Internet Mail Extensions) type as well as a specific suffix.
+
+We are familiar with file suffixes/extensions. We see them all the time (.docx, .pdf .html are some other examples).
+
+Syntax for a MIME Type:
+
+`type/subtype`
+
+A type is the general category the document falls into like video or text for instance. Subtype identifies the exact kind of data of the specified MIME type.
+
+---
+
+# Responsive Images
+
+With the introduction to different screen sizes and resolutions came the need for responsive images - images that responded to different conditions like screen sizes, resolutions, networks speed, and other criteria. By accounting for these criteria browsers are able to deliver the best version of an image for the environment.
+
+When learning about responsive images I found it helpful to learn more about pixels and screen displays.
+
+## Pixel
+
+Pixel is short for "picture element." A pixel is the smallest unit of a digital image or display (like a computer monitor, smartphone, television, or tablet screen for example). Each pixel is a single point in an image and can be a different color. This is the physical pixel, more on that in the next section.
+
+## CSS & Physical Pixels
+
+There are lots of types of pixels. But, for responsive images we want to focus on physical and CSS pixels.
+
+- Physical Pixel: They are an absolute unit. The smallest physical unit in a display. Each device pixel represents a single point of color on a screen. Each physical pixel usually has three sub pixels (red,green,and blue (RGB)).
+
+- CSS Pixel: A unit of measurement in CSS that is used to style elements on a web page. CSS pixels are a relative unit of measurement. They are used to ensure consistent sizing across devices with different screen resolutions.
+
+Traditionally one CSS pixel = one physical pixel.
+
+When apple coined the term retina display in the 2010s. With the introduction of retina displays the 1:1 ratio of physical and CSS pixels changed to a 2x1 ratio (or higher). This means that one CSS pixel = four physical pixels (2x2).
+
+## Types of Displays
+
+When reading Learning Web Design (Robbins) she mentioned 1x, 2x, and 3x devices and I was confused by this. It turns out these have specific definitions that I understood better elsewhere.
+
+- 1x displays: This is a standard display where one device pixel equals one CSS pixel.
+
+- Appearance: Images and text appear at their true size and resolution. Older monitors and screens use 1x displays. An image that is 121x121px physical pixels will be 121x121px CSS pixels - a 1:1 ratio.
+
+---
+
+- 2x display: Often called retina displays, high resolution, or HiDPI (high dots per inch).
+
+- Appearance: Images and text are displayed at a higher resolution making them appear sharper and more detailed. A 121x121px image will be twice the size in CSS pixels. So a 121x121px will be doubled in size and take up 442x442px on the screen.
+
+- 3x display: Ultra high resolution.
+
+- Appearance: Images are so crisp they sometimes hurt my eyes on television (haha). Each CSS pixel corresponds to 9 pixels, 3x3px. An image that is 121x121px will be 363x363px CSS pixels.
+
+## Resolution
+
+The total number of pixels displayed on a screen is called resolution. It is common for computer monitors to have a resolution of 2,073,600 px or 2 mega pixels.
+
+### Finding Screen Resolution
+
+To calculate a screens resolution take the number of pixels displayed horizontally and vertically and multiply the values.
+
+For example: $$1920px \times 1080px = 2,073,600px(2 mega pixels).$$
+
+A 1080px screen is also called full HD.
+
+## Screen Size
+
+Now that we understand screen resolution, we should learn about screen size, which is the physical size of a a screen. Screen size unlike many other things in life is measured diagonally instead of vertically or horizontally. I have a 24 inch monitor. I know this because I measured it horizontally.
+
+## Aspect Ratio
+
+Is comparison of the width and height of a screen or image. To find he aspect ratio of a screen we need to know its resolution (the number of vertical and horizontal pixels). I like to think of aspect ratio as a fraction.
+
+$\frac{1920}{180} =$ $\frac{16}{9} =$ $16\colon9$
+
+## Pixel Density
+
+Pixel density is equivalent to the amount of pixels found within an inch of the screen or printed material. So it is fair to say that pixels per inch or ppi = pixel density. Pixels per centimeter (ppc) can also be used, though it is less common than ppi.
+
+To find the ppi you measure one inch diagonally on screen then draw a line through that. The amount of pixels that line intersects gives you the pixel density or ppi.
+
+### Calculating Pixel Density or PPI
+
+There is an equation to find the pixel density or ppi.
+
+$PPI=\frac{\sqrt{(\text{width}^2 + \text{height}^2)}}{\text{Diagonal Size (inches)}}$
+
+Lets calculate the ppi of a screen that has a resolution of 1920 x 1080px that is 24 in size:
+
+$PPI=\frac{\sqrt{(\text{1920}^2 + \text{1080}^2)}}{\text{24(inches)}}$
+
+$PPI=\frac{\sqrt{(\text{3686400}^2 + \text{1166400}^2)}}{\text{24(inches)}}$
+
+$PPI=\frac{\sqrt{(\text{4852800
+})}}{\text{24(inches)}}$
+
+$PPI=\frac{2202.907}{24} \approx 91.79$
+
+So a 1920 x 1080 px screen that is 24 in has a PPI of $\approx 91.79$.
+
+## Resolution vs Pixel Density
+
+| Resolution                                                                                                                                                    | Pixel Density                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Total number of pixels in an image or screen. Calculated by taking the amount of pixels in the width of a screen or image by the amount pixels in the height. | How closely the pixels are packed together. Measured in pixels per inch or less commonly pixels per centimeter. |
+
+---
+
+# Marking-Up Responsive Images
+
+To markup responsive images in HTML we use the `<img>` element, which as we know takes a the `src and alt attributes `.
+
+`<img src="url" alt"description of image" />`
+
+We use different attributes and elements in conjunction with the `img` tag.
+
+When thinking about responsive images it is helpful to identify and understand your use case to find a solution.
+
+In the article [Responsive Images 101](https://cloudfour.com/thinks/responsive-images-101-definitions/) Jason Grisby provides two of the most common use cases for using responsive images.
+
+1. Resolution Switching - Any scenario where we want to provide different sizes of an image and we are not modifying the images content or aspect ratio. This is the most common scenario.
+
+2. Art Direction - Any time we need to change the content or aspect ratio of an image based on the size of an image on a page.
+
+## Srcset Attribute
+
+When our use case is resolution switching we employ the `srcset` attribute.
+
+## Src Attribute Syntax
+
+In HTML the `srcset` attribute is used to specify different image sizes and resolutions, which allow us to use responsive images.
+
+The value of `srcset` is a comma separated list of options.
+
+Each option has two parts:
+
+1. Image URL
+
+2. A descriptor
+
+The first part is self explanatory, given that we understand how the `src` attribute of the `<img>` element works.
+
+### X & W Descriptors
+
+The descriptors are either x or w descriptors. Let's talk about x-descriptors first.
+
+### x-descriptors
+
+- x-descriptors: Specifies the target devices [pixel density](#pixel-density) of an image. x descriptors tell the browser to select an image based on a screen's resolution. It doesn't consider the dimensions of the screen or viewport. Because of x-descriptors focus on screen resolution it is best used with fixed width images (logos, social media badges and headers, and thumbnails and icons).
+
+### Srcset w/ x-descriptor
+
+`<img src="default.jpg" alt="image description"
+    srcset="image1.jpg 2x, 
+             image2.jpg 3x," />
+            `
+
+In the sample above `srcset` has 2 items in its comma separated list.
+
+Let's break down each item.
+
+1. `image1.jpg 2x` When the resolution of a screen is 2x
+   then this image will be used.
+
+2. `image2.jpg 3x` When the screen's resolution is 3x this image will be used.
+
+Browsers that recognize `srcset` check the screens resolution and download the image they think will work best. When we use `srcset` with `<img>` we are giving the browser control over image selection.
+
+Note the usage of the `src`attribute, which again, is required. The`src`attribute usually specifies the default 1x image.
+
+For browsers that do not support`srcset`the value of `src` is the fallback.
+
+#### w-descriptors
+
+The sample below shows how I understand the structure of the `srcset` attribute.
+
+`srcset="image-url descriptor,
+image-url descriptor"`
+
+## Helpful Info
+
+#### Caching + Images
+
+When a browser downloads an image it stores the file on the disk cache temporarily. So when the browser needs to display the image again it can pull from the local copy instead of making a new server request.
