@@ -35,15 +35,20 @@ You'll need to convert non web supported images to web supported images. For ins
 
 If you have to keep your image in an original non-web supported format you can make it available as an external image.
 
-`<a href="originalartwork.tiff">View the original artwork</a>`
+```
+<a href="originalartwork.tiff">
+    View the original artwork
+    </a>
+
+```
 
 ## Adding Images to a Document
 
-To add an image to a document we use the `<img>` tag.
+To add an image to a document we use the `<img>` element.
 
-Important things to know about the `<img> element.
+Important things to know about the `<img>` element.
 
-- `<img>` is self closing. You don't need to add a closing tag to it.
+- `<img>` is self closing. You don't need to add an end tag to it.
 
 - It is an empty tag, meaning it doesn't have any content.
 
@@ -53,9 +58,11 @@ Important things to know about the `<img> element.
 
 - The bottom edge of an image aligns with the baseline of text. Can change this with CSS.
 
-- The attributes src and alt are required with the `<img>` tag.
+- The attributes `src` and `alt` are required with the `<img>` tag.
 
-The value of the src attribute is the images location. This can be a relative or absolute path. I like to think of src as href for images.
+### `<img>` Attributes
+
+The value of the src attribute is the image's location. This can be a relative or absolute path. I like to think of src as href for images.
 
 The value of the alt attribute is the text that describes the images. In case the images doesn't load or someone is using assistive technology the alt text will be shown or read. If an image doesn't add meaning to the text you can leave alt empty. When leaving it empty don't add a space between quotation marks. It should look like this:
 
@@ -192,7 +199,7 @@ A type is the general category the document falls into like video or text for in
 
 # Responsive Images
 
-With the introduction to different screen sizes and resolutions came the need for responsive images - images that responded to different conditions like screen sizes, resolutions, networks speed, and other criteria. By accounting for these criteria browsers are able to deliver the best version of an image for the environment.
+With the introduction to different screen sizes and resolutions came the need for responsive images - images that tailored to a users environment. That environment includes things like screen sizes, resolutions, networks speed, and other criteria. By accounting for these criteria browsers are able to deliver the best version of an image for a user's environment.
 
 When learning about responsive images I found it helpful to learn more about pixels and screen displays.
 
@@ -287,7 +294,7 @@ So a 1920 x 1080 px screen that is 24 in has a PPI of $\approx 91.79$.
 
 # Marking-Up Responsive Images
 
-To markup responsive images in HTML we use the `<img>` element, which as we know takes a the `src and alt attributes `.
+To markup responsive images in HTML we use the `<img>` element, which as we know always takes a the `src and alt attributes `.
 
 `<img src="url" alt"description of image" />`
 
@@ -297,15 +304,21 @@ When thinking about responsive images it is helpful to identify and understand y
 
 In the article [Responsive Images 101](https://cloudfour.com/thinks/responsive-images-101-definitions/) Jason Grisby provides two of the most common use cases for using responsive images.
 
-1. Resolution Switching - Any scenario where we want to provide different sizes of an image and we are not modifying the images content or aspect ratio. This is the most common scenario.
+1. **Resolution Switching** - Any scenario where we want to provide different sizes of an image and we are not modifying the images content or aspect ratio. This is the most common scenario. Resolution Switching considers either screen resolution or viewport size.
 
-2. Art Direction - Any time we need to change the content or aspect ratio of an image based on the size of an image on a page.
+| Screen                                                                                                                          | Viewport                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The physical display of a device, such as a monitor, smartphone, or tablet. The screen's size is measured diagonally in inches. | The visible area of a web page on a user's screen. It is the portion of the page that is currently viewable and can vary in size depending on device or browser window. In web development, the viewport refers to the area of the browser window that displays a website. It can vary depending on the device and the browser window size. The viewport size is crucial in responsive web design because it determines how content should be scaled and arranged for optimal viewing. On a mobile devices the viewport is the whole screen.On a desktop browser the viewport is the area where a web page is displayed.Items like scroll bars, tool bars, address bar, tabs, menu buttons, status bars, and bookmark bars are considered the web browsers chrome. |
 
-## Srcset Attribute
+The viewport is especially important in responsive design because it helps developers create websites that work well on different devices by using CSS media queries and other techniques to adapt the layout based on the viewport size. This way, a website can provide a good user experience regardless of whether it's viewed on a large desktop monitor or a small smartphone screen.
+
+2. **Art Direction** - Any time we need to change the content or aspect ratio of an image based on the size of an image on a page.
+
+## Resolution Switching
 
 When our use case is resolution switching we employ the `srcset` attribute.
 
-## Src Attribute Syntax
+### Src Attribute Syntax
 
 In HTML the `srcset` attribute is used to specify different image sizes and resolutions, which allow us to use responsive images.
 
@@ -315,7 +328,7 @@ Each option has two parts:
 
 1. Image URL
 
-2. A descriptor
+2. A descriptor (either an x or w descriptors)
 
 The first part is self explanatory, given that we understand how the `src` attribute of the `<img>` element works.
 
@@ -323,22 +336,23 @@ The first part is self explanatory, given that we understand how the `src` attri
 
 The descriptors are either x or w descriptors. Let's talk about x-descriptors first.
 
-### x-descriptors
+## x-descriptors
 
 - x-descriptors: Specifies the target devices [pixel density](#pixel-density) of an image. x descriptors tell the browser to select an image based on a screen's resolution. It doesn't consider the dimensions of the screen or viewport. Because of x-descriptors focus on screen resolution it is best used with fixed width images (logos, social media badges and headers, and thumbnails and icons).
 
 ### Srcset w/ x-descriptor
 
-`<img src="default.jpg" alt="image description"
-      srcset="image1.jpg 2x, 
-             image2.jpg 3x," />
-            `
+```
+<img src="default.jpg" alt="image description"
+      srcset="image1.jpg 2x,
+             image2.jpg 3x" />
+```
 
 In the sample above `srcset` has 2 items in its comma separated list.
 
 Let's break down each item.
 
-1. `image1.jpg 2x` When the resolution of a screen is 2x
+1. image1.jpg 2x` When the resolution of a screen is 2x
    then this image will be used.
 
 2. `image2.jpg 3x` When the screen's resolution is 3x this image will be used.
@@ -353,17 +367,7 @@ For browsers that do not support`srcset`the value of `src` is the fallback.
 
 W-descriptors allow for images to change based on size of the browser viewport.
 
-### What is a Viewport
-
-A viewport refers to the visible area of a web page on a user's screen. It is the portion of the page that is currently viewable and can vary in size depending on device or browser window.
-
-On a mobile devices the viewport is the whole screen.
-
-On a desktop browser the viewport is the area where a web page is displayed.
-
-Items like scroll bars, tool bars, address bar, tabs, menu buttons, status bars, and bookmark bars are considered the web browsers chrome.
-
-## Back to w-descriptors
+## Srcset to w-descriptors
 
 Again we use the `<img>` element, with the `srcset` (like we do with x-descriptors).As its name indicates, a w-descriptor provides the pixel width of each image, which comes after the image url. In addition to `srcset` we also use the `sizes` attribute.
 
@@ -374,19 +378,22 @@ Again we use the `<img>` element, with the `srcset` (like we do with x-descripto
 
 `srcset` has 4 list items. The first image has a width of 480px the second 960px, the third 1280px and the last 2400px.
 
-### Sizes Attribute
+## Sizes Attribute
 
 The `sizes` attribute tells the web browser how much of the viewport the image will take up. It is important for sizes browser the approximate size of the images because when a browser downloads the HTML doc for website the first thing it does scan the document in order to establish its outline structure (Document Object Model (DOM)). Right after the browser pre-loader grabs all the images from the server so they are ready to go. Finally the browser downloads the CSS and JavaScript. The CSS file probably has instructions about the layout of images, but the images are downloaded before these instructions. So we give the browser a good hint with the `sizes` attribute about how much space images will take up. This way the preloader can select the correct image from the `srcset` list.
 
 In the simplest scenario we would have an image like a banner that always appears at 100% regardless of device.
 
-<img src="doggos_640.jpg" 
+```
+<img src="doggos_640.jpg"
   alt="image of a dog"
   srcset="doggo_480.jpg 480w,
         doggo_960.jpg 960w,
         doggo_1280.jpg 1280w,
         doggo_2400.jpg 2400w"
-  sizes="100 vw"/>
+  sizes="100vw"/>
+
+```
 
 `sizes` tells the browser that the image it selects should take up 100% of the viewport. `vw` stands for viewport width and it is the most common unit used with the sizes attribute. There are other units that can be used like px, ems, viewport height (vw) and others. Percentages are invalid.
 
@@ -401,9 +408,9 @@ In the scenarios where an image is a component of a page that needs to respond t
 1. Media Condition: a condition that determines when a particular length should be used (which has two dependent values the media feature and the media feature's value). The media condition is wrapped in parenthesis ().
 2. Length: indicates the width an image will occupy in the layout if the media condition is met.
 
-### Media Condition Parts
+## Media Condition Parts
 
-1. Media Feature: A characteristic the device or viewport that the browser testes in order to apply a particularly sized image to the layout. With the `sizes` attribute the media feature values can be:
+1. **Media Feature**: A characteristic the device or viewport that the browser testes in order to apply a particularly sized image to the layout. With the `sizes` attribute the media feature values can be:
 
 - max-width
 - min-width
@@ -412,7 +419,7 @@ In the scenarios where an image is a component of a page that needs to respond t
 - orientation: determines if the device is in portrait or landscape. In short orientation can have two values either portrait or landscape.
 - aspect-ratio: width:height ratio of screen for instance 16:9.
 
-2. Value: The value (some sort of of unit like px) of the media feature.
+2. **Value**: The value (some sort of of unit like px) of the media feature.
 
 The media feature and its value are dependent on each other.
 
@@ -424,21 +431,181 @@ The media feature is followed by a colon `:`. After the colon is the second part
 
 Here is a complete code snippet:
 
-<img src="doggos_640.jpg" 
+```
+<img src="doggos_640.jpg"
   alt="image of a dog"
   srcset="doggo_480.jpg 480w,
-        doggo_960.jpg 960w,
-        doggo_1280.jpg 1280w,
-        doggo_2400.jpg 2400w"
-  sizes="(max-width: 480px) 100vw
-         (max-width: 960px) 75vw, 
-         240px"/>
+          doggo_960.jpg 960w,
+          doggo_1280.jpg 1280w,
+          doggo_2400.jpg 2400w"
+  sizes="(max-width: 480px) 100vw,
+         (max-width: 960px) 75vw,
+         240px" />
+
+```
 
 Let's break this down, we already covered the first item in the `sizes` list. The second item says, if the viewport is wider than 480px but not wider than 960px image takes up 75% if the viewport. If the viewport is larger than 960px and doesn't meet any of prior media conditions the image gets sized to 240px.
+
+# Summary of Resolution Switching
+
+Resolution switching is all about delivering the most appropriate image sized based on device's resolution and pixel density, which ensures high resolution devices like retina displays get high quality images while lower resolution devices receive smaller, more bandwidth-efficient
+images.
+
+We always use the `<img>` element with the `srcset` attribute when resolution switching. Additionally we may also add the `sizes` attribute, depending on if we are targeting screen resolution or image width.
+
+## Targeting Screen Resolution
+
+When targeting a screen's resolution, we use
+x-descriptors. The browser selects an image based on the device's pixel density, ensuring higher resolution images are loaded for high-density screens, so the `sizes` attribute is not needed.
+
+- Target: Device pixel density (screen resolution).
+
+- Purpose: Used when you want to provide images optimized for different screen resolutions, such as Retina displays.
+
+- Sizes Attribute: Not used with x descriptors because the decision is based on pixel density, not the size of the viewport or layout. The srcset attribute alone suffices as it allows the browser to choose the right image based on the device's screen resolution.
+
+Example with x-descriptors:
+
+```
+<img src="default.jpg"
+  alt="image description"
+  srcset="image1.jpg 1x,
+          image2.jpg 2x,
+          image3.jpg 3x" />
+```
+
+In the code snippet above, the browser selects an image based on the device's pixel density, ensuring higher resolution images are loaded for high-density screens without needing sizes.
+
+## Targeting Viewport
+
+When targeting the viewport we use w-descriptors, which use the `sizes` attribute to inform the browser about the layout space the image will occupy, optimizing image selection for different viewport widths.
+
+- Target: Viewport width.
+
+- Purpose: Used when you want the browser to select an image based on the width of the viewport.
+
+- Sizes Attribute: Essential because it provides the browser with information about how much space the image will take up in the layout. This helps the browser make a more informed decision about which image to download, improving performance and ensuring the right image is chosen for different screen sizes and layouts.
+
+Example with w-descriptors:
+
+```
+<img src="doggos_640.jpg"
+  alt="image of a dog"
+  srcset="doggo_480.jpg 480w,
+          doggo_960.jpg 960w,
+          doggo_1280.jpg 1280w,
+          doggo_2400.jpg 2400w"
+  sizes="(max-width: 480px) 100vw,
+         (max-width: 960px) 75vw,
+         240px" />
+```
+
+In the code snippet above the `sizes` attribute tells the browser how wide the image should be displayed based on the viewport width, allowing it to select the most appropriate image from the `srcset`.
+
+| x-descriptor                                                                                                                                 | w-descriptor                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Focus on screen resolution, allowing the browser to choose an appropriate image based solely on pixel density without layout considerations. | Use the `sizes` attribute to inform the browser about the layout space the image will occupy, optimizing image selection for different viewport widths. |
+
+---
+
+## Art Direction
+
+We have learned about image selection based on screen resolution (x-descriptor) and viewport width (w-descriptor). In both cases, the content of the image stays the same with changes in size.
+
+Sometimes we need to alter the image, cropping a larger image to zoom in on important details for a smaller display, removing text that is too small to reade, or providing a landscape and portrait version of an image. This is art direction, altering an image to best suit an environment. We use the `<picture>` element with art direction.
+
+### Picture Element
+
+There are some important principles to remember about the `<picture>` element.
+
+- It has no attributes - essentially it is a wrapper for a number of `<source>` elements and one `<img>` element.
+
+- The `<img>` element is required as the last element in the list. Without it no image will display.
+
+#### Syntax of Picture Element
+
+The `<picture>` element is a container used to specify multiple `<source>` elements for different scenarios, along with a default `<img>` element.
+
+1. `<source>` element: Used to specify different images or media resources based on various conditions. Each `<source>` element can have the following attributes:
+
+- `media`: Defines a media query to apply the srcset conditionally. This is useful for specifying different images for different screen sizes, orientations, resolutions, etc.
+- `srcset`: Provides the URL of the image to use when the media condition is met.
+
+`<img>`: is a fallback image that is displayed if none of the `<source>` elements' conditions are met. It is also the `<img>` element that places the image on the page, so don't forget it. (`<img>` always takes a `src` and `alt` attribute).
+
+When the browser selects the image the URL provided in `srcset` gets passed to `src` attribute of the `<img>` element.
+Let's take a look at a code snippet and break it down:
+
+```
+ <picture>
+        <source media="(min-width: 1024px)" srcset="large-image.jpg">
+        <source media="(min-width: 600px)" srcset="medium-image.jpg">
+        <img src="small-image.jpg" alt="sample image">
+```
+
+This example instructs the browser that if the viewport is 1024px wide or larger to display large-image.jpg. If the viewport is wider 600px or but smaller than 1024 then display medium-image.jpg. Lastly for viewports smaller than 600px and therefore don't match any of the source's media queries small-image.jpg should be used; this image will also be used for browsers that do not support `<picture>`.
+`<picture>`
+
+## Picture Element with Type Attribute
+
+The `<picture>` element can also use the `type` attribute in the `<source>` element to specify different image formats. Remember there are [newer image types like webP and JEPG-XR that arent supported by every browser](#image-formats)This is useful when you want to provide different image formats (like WebP, JPEG, or PNG) ack to the browser, and let the browser choose the most suitable one.
+
+- `type`: Used in the `<source>` element specifies the MIME type of the image. This allows the browser to choose the best image format it supports.
+
+### Code Snippet
+
+Here's an example where we provide different image formats for the browser to choose from:
+
+```
+    <picture>
+        <!-- WebP format for browsers that support it -->
+        <source type="image/webp" srcset="image.webp">
+
+        <!-- JPEG format as a fallback -->
+        <source type="image/jpeg" srcset="image.jpg">
+
+        <!-- Default image if none of the above formats are supported -->
+        <img src="image.jpg" alt="Sample Image">
+    </picture>
+```
+
+#### Breakdown of Code Snippet
+
+1. `<picture>`: acts as a container for different image sources.
+
+2. First <source> element:
+
+- `type="image/webp"`: Specifies that this source is a WebP image.
+
+- `srcset="image.webp"`: Provides the URL of the WebP image.
+
+3. Second <source> element:
+
+- `type="image/jpeg"`: Specifies that this source is a JPEG image.
+
+- `srcset="image.jpg"`: Provides the URL of the JPEG image.
+
+4. <img> element:
+
+`src="image.jpg"`: Provides the default image (in JPEG format) to be used if none of the `<source>` elements' formats are supported.
+
+`alt="Sample Image"`: Provides alt text for the image for accessibility.
+
+Key Points
+
+- The `<picture>` element allows you to define multiple image sources.
+
+- The `type` attribute in the `<source>` element specifies the format of the image (e.g., WebP, JPEG).
+
+- The browser will choose the first supported format and ignore the rest.
+
+- The `<img>` element acts as a fallback, ensuring that an image is displayed even if none of the specified formats are supported.
 
 ---
 
 ## Helpful Info
+
+- [If you want to check browser support for HTML or CSS features](https://caniuse.com/)
 
 #### Caching + Images
 
